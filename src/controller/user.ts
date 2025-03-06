@@ -4,14 +4,28 @@ import { getResponseNotFound } from "../utils";
 
 const USERS_DB_TABLE = "user";
 
-export function getUser(request: BunRequest) {
-	if (!request.params.id) return getResponseNotFound();
+export async function getUser(request: BunRequest) {
+	const THIS_URL = new URL(request.url);
+	const PASSWORD: string = THIS_URL.searchParams.get("password") || "";
+	const DB_USER: { password: string } | null = getDatabaseInstance()
+		.query(`SELECT * FROM ${USERS_DB_TABLE} WHERE id = ?`)
+		.get(request.params.id);
 
-	return Response.json(
-		getDatabaseInstance()
-			.query(`SELECT * FROM ${USERS_DB_TABLE} WHERE id = ?`)
-			.get(request.params.id)
+	if (DB_USER == null) return getResponseNotFound();
+
+	const IS_PASSWORD_CORRECT = await Bun.password.verify(
+		PASSWORD,
+		DB_USER.password
 	);
+
+	if (IS_PASSWORD_CORRECT)
+		return Response.json(
+			getDatabaseInstance()
+				.query(`SELECT * FROM ${USERS_DB_TABLE} WHERE id = ?`)
+				.get(request.params.id)
+		);
+
+	return getResponseNotFound();
 }
 
 export async function addUser(request: BunRequest) {
@@ -23,6 +37,8 @@ export async function addUser(request: BunRequest) {
 	)
 		return getResponseNotFound();
 
+	const HASH_PASSWORD = await Bun.password.hash(REQUEST_BODY.password);
+
 	getDatabaseInstance()
 		.query(
 			`INSERT INTO ${USERS_DB_TABLE} (first_name, last_name, email, password) VALUES (?, ?, ?, ?)`
@@ -31,7 +47,7 @@ export async function addUser(request: BunRequest) {
 			REQUEST_BODY.first_name,
 			REQUEST_BODY.last_name,
 			REQUEST_BODY.email,
-			REQUEST_BODY.password
+			HASH_PASSWORD
 		);
 
 	return new Response(null, { status: 201 });
