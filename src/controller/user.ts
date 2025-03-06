@@ -1,11 +1,12 @@
 import type { BunRequest } from "bun";
 import { getDatabaseInstance } from "../database";
 import { getResponseNotFound } from "../utils";
+import { Database } from "bun:sqlite";
 
-const USERS_DB_TABLE = "user";
+const USERS_DB_TABLE: string = "user";
 
-export async function getUser(request: BunRequest) {
-	const THIS_URL = new URL(request.url);
+export async function getUser(request: BunRequest): Promise<Response> {
+	const THIS_URL: URL = new URL(request.url);
 	const PASSWORD: string = THIS_URL.searchParams.get("password") || "";
 	const DB_USER: { password: string } | null = getDatabaseInstance()
 		.query(`SELECT * FROM ${USERS_DB_TABLE} WHERE id = ?`)
@@ -13,7 +14,7 @@ export async function getUser(request: BunRequest) {
 
 	if (DB_USER == null) return getResponseNotFound();
 
-	const IS_PASSWORD_CORRECT = await Bun.password.verify(
+	const IS_PASSWORD_CORRECT: boolean = await Bun.password.verify(
 		PASSWORD,
 		DB_USER.password
 	);
@@ -28,8 +29,13 @@ export async function getUser(request: BunRequest) {
 	return getResponseNotFound();
 }
 
-export async function addUser(request: BunRequest) {
-	const REQUEST_BODY = await request.json();
+export async function addUser(request: BunRequest): Promise<Response> {
+	const REQUEST_BODY: {
+		first_name: string;
+		last_name: string;
+		email: string;
+		password: string;
+	} = await request.json();
 
 	if (
 		(REQUEST_BODY.first_name === null || REQUEST_BODY.last_name === null,
@@ -37,7 +43,9 @@ export async function addUser(request: BunRequest) {
 	)
 		return getResponseNotFound();
 
-	const HASH_PASSWORD = await Bun.password.hash(REQUEST_BODY.password);
+	const HASH_PASSWORD: string = await Bun.password.hash(
+		REQUEST_BODY.password
+	);
 
 	getDatabaseInstance()
 		.query(
@@ -53,10 +61,10 @@ export async function addUser(request: BunRequest) {
 	return new Response(null, { status: 201 });
 }
 
-export async function updateUser(request: BunRequest) {
+export async function updateUser(request: BunRequest): Promise<Response> {
 	const REQUEST_BODY: object = await request.json();
-	const TARGET_ID = parseInt(request.params.id);
-	const DATABASE_INSTANCE = getDatabaseInstance();
+	const TARGET_ID: number = parseInt(request.params.id);
+	const DATABASE_INSTANCE: Database = getDatabaseInstance();
 
 	for (const [key, value] of Object.entries(REQUEST_BODY)) {
 		if (key !== "id") {
@@ -69,8 +77,8 @@ export async function updateUser(request: BunRequest) {
 	return new Response(null, { status: 201 });
 }
 
-export function deleteUser(request: BunRequest) {
-	const TARGET_ID = request.params.id;
+export function deleteUser(request: BunRequest): Response {
+	const TARGET_ID: number = parseInt(request.params.id);
 
 	getDatabaseInstance()
 		.query(`DELETE FROM ${USERS_DB_TABLE} WHERE id = ?`)

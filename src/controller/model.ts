@@ -1,10 +1,11 @@
 import type { BunRequest } from "bun";
 import { getDatabaseInstance } from "../database";
 import { getResponseNotFound } from "../utils";
+import { Database } from "bun:sqlite";
 
-const MODELS_DB_TABLE = "model";
+const MODELS_DB_TABLE: string = "model";
 
-export function getModels() {
+export function getModels(): Response {
 	return Response.json({
 		brands: getDatabaseInstance()
 			.query(`SELECT * FROM ${MODELS_DB_TABLE}`)
@@ -12,18 +13,29 @@ export function getModels() {
 	});
 }
 
-export function getModel(request: BunRequest) {
-	if (!request.params.id) return getResponseNotFound();
+export function getModel(request: BunRequest): Response {
+	const TARGET_ID: number = parseInt(request.params.id);
 
 	return Response.json(
 		getDatabaseInstance()
 			.query(`SELECT * FROM ${MODELS_DB_TABLE} WHERE id = ?`)
-			.get(request.params.id)
+			.get(TARGET_ID)
 	);
 }
 
-export async function addModel(request: BunRequest) {
-	const REQUEST_BODY = await request.json();
+export async function addModel(request: BunRequest): Promise<Response> {
+	const REQUEST_BODY: {
+		name: string;
+		brand: number;
+		year: number;
+		transmission: string;
+		drivetrain: string;
+		engine: string;
+		vin: string;
+		doors: number;
+		seating: number;
+		horse_power: number;
+	} = await request.json();
 
 	if (
 		REQUEST_BODY.name === null ||
@@ -59,10 +71,10 @@ export async function addModel(request: BunRequest) {
 	return new Response(null, { status: 201 });
 }
 
-export async function updateModel(request: BunRequest) {
+export async function updateModel(request: BunRequest): Promise<Response> {
 	const REQUEST_BODY: object = await request.json();
-	const TARGET_ID = parseInt(request.params.id);
-	const DATABASE_INSTANCE = getDatabaseInstance();
+	const TARGET_ID: number = parseInt(request.params.id);
+	const DATABASE_INSTANCE: Database = getDatabaseInstance();
 
 	for (const [key, value] of Object.entries(REQUEST_BODY)) {
 		DATABASE_INSTANCE.query(
@@ -73,8 +85,8 @@ export async function updateModel(request: BunRequest) {
 	return new Response(null, { status: 201 });
 }
 
-export function deleteModel(request: BunRequest) {
-	const TARGET_ID = request.params.id;
+export function deleteModel(request: BunRequest): Response {
+	const TARGET_ID: number = parseInt(request.params.id);
 
 	getDatabaseInstance()
 		.query(`DELETE FROM ${MODELS_DB_TABLE} WHERE id = ?`)

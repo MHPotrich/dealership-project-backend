@@ -2,9 +2,9 @@ import type { BunRequest } from "bun";
 import { getDatabaseInstance } from "../database";
 import { getResponseNotFound } from "../utils";
 
-const BRANDS_DB_TABLE = "brand";
+const BRANDS_DB_TABLE: string = "brand";
 
-export function getBrands() {
+export function getBrands(): Response {
 	return Response.json({
 		brands: getDatabaseInstance()
 			.query(`SELECT * FROM ${BRANDS_DB_TABLE}`)
@@ -12,18 +12,18 @@ export function getBrands() {
 	});
 }
 
-export function getBrand(request: BunRequest) {
-	if (!request.params.id) return getResponseNotFound();
+export function getBrand(request: BunRequest): Response {
+	const TARGET_ID: number = parseInt(request.params.id);
 
 	return Response.json(
 		getDatabaseInstance()
 			.query(`SELECT * FROM ${BRANDS_DB_TABLE} WHERE id = ?`)
-			.get(request.params.id)
+			.get(TARGET_ID)
 	);
 }
 
-export async function addBrand(request: BunRequest) {
-	const REQUEST_BODY = await request.json();
+export async function addBrand(request: BunRequest): Promise<Response> {
+	const REQUEST_BODY: { name: string | null } = await request.json();
 
 	if (!REQUEST_BODY.name) return getResponseNotFound();
 
@@ -34,9 +34,9 @@ export async function addBrand(request: BunRequest) {
 	return new Response(null, { status: 201 });
 }
 
-export async function updateBrand(request: BunRequest) {
+export async function updateBrand(request: BunRequest): Promise<Response> {
 	const REQUEST_BODY: { name: string } = await request.json();
-	const TARGET_ID = parseInt(request.params.id);
+	const TARGET_ID: number = parseInt(request.params.id);
 
 	if (!REQUEST_BODY.name) return getResponseNotFound();
 
@@ -47,8 +47,8 @@ export async function updateBrand(request: BunRequest) {
 	return new Response(null, { status: 201 });
 }
 
-export function deleteBrand(request: BunRequest) {
-	const TARGET_ID = request.params.id;
+export function deleteBrand(request: BunRequest): Response {
+	const TARGET_ID: number = parseInt(request.params.id);
 
 	getDatabaseInstance()
 		.query(`DELETE FROM ${BRANDS_DB_TABLE} WHERE id = ?`)

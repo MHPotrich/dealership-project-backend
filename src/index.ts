@@ -21,7 +21,7 @@ import {
 } from "./controller/model";
 import { addUser, deleteUser, getUser, updateUser } from "./controller/user";
 
-const PORT = Bun.env.PORT || 3000;
+const PORT: string | number = Bun.env.PORT || 3000;
 
 Bun.serve({
 	port: PORT,
