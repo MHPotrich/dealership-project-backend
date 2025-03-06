@@ -40,11 +40,30 @@ export function getCar(request: BunRequest) {
 export async function addCar(request: BunRequest) {
 	const REQUEST_BODY = await request.json();
 
-	if (!REQUEST_BODY.name) return getResponseNotFound();
+	if (
+		REQUEST_BODY.list_price === null ||
+		REQUEST_BODY.sale_price === null ||
+		REQUEST_BODY.in_stock === null ||
+		REQUEST_BODY.model === null ||
+		REQUEST_BODY.travelled_distance === null ||
+		REQUEST_BODY.exterior_color === null ||
+		REQUEST_BODY.interior_color === null
+	)
+		return getResponseNotFound();
 
 	getDatabaseInstance()
-		.query(`INSERT INTO ${CARS_DB_TABLE} (name) VALUES (?)`)
-		.run(REQUEST_BODY.name);
+		.query(
+			`INSERT INTO ${CARS_DB_TABLE} (list_price, sale_price, in_stock, model, travelled_distance, exterior_color, interior_color) VALUES (?, ?, ?, ?, ?, ?, ?)`
+		)
+		.run(
+			REQUEST_BODY.list_price,
+			REQUEST_BODY.sale_price,
+			REQUEST_BODY.in_stock,
+			REQUEST_BODY.model,
+			REQUEST_BODY.travelled_distance,
+			REQUEST_BODY.exterior_color,
+			REQUEST_BODY.interior_color
+		);
 
 	return new Response(null, { status: 201 });
 }

@@ -25,11 +25,36 @@ export function getModel(request: BunRequest) {
 export async function addModel(request: BunRequest) {
 	const REQUEST_BODY = await request.json();
 
-	if (!REQUEST_BODY.name) return getResponseNotFound();
+	if (
+		REQUEST_BODY.name === null ||
+		REQUEST_BODY.brand === null ||
+		REQUEST_BODY.year === null ||
+		REQUEST_BODY.transmission === null ||
+		REQUEST_BODY.drivetrain === null ||
+		REQUEST_BODY.engine === null ||
+		REQUEST_BODY.vin === null ||
+		REQUEST_BODY.doors === null ||
+		REQUEST_BODY.seating === null ||
+		REQUEST_BODY.horse_power === null
+	)
+		return getResponseNotFound();
 
 	getDatabaseInstance()
-		.query(`INSERT INTO ${MODELS_DB_TABLE} (name) VALUES (?)`)
-		.run(REQUEST_BODY.name);
+		.query(
+			`INSERT INTO ${MODELS_DB_TABLE} (name, brand, year, transmission, drivetrain, engine, vin, doors, seating, horse_power) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+		)
+		.run(
+			REQUEST_BODY.name,
+			REQUEST_BODY.brand,
+			REQUEST_BODY.year,
+			REQUEST_BODY.transmission,
+			REQUEST_BODY.drivetrain,
+			REQUEST_BODY.engine,
+			REQUEST_BODY.vin,
+			REQUEST_BODY.doors,
+			REQUEST_BODY.seating,
+			REQUEST_BODY.horse_power
+		);
 
 	return new Response(null, { status: 201 });
 }

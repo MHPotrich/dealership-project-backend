@@ -5,7 +5,13 @@ import {
 	getBrands,
 	updateBrand,
 } from "./controller/brand";
-import { getCars } from "./controller/car";
+import {
+	addCar,
+	deleteCar,
+	getCar,
+	getCars,
+	updateCar,
+} from "./controller/car";
 import {
 	addModel,
 	deleteModel,
@@ -13,6 +19,7 @@ import {
 	getModels,
 	updateModel,
 } from "./controller/model";
+import { addUser, deleteUser, getUser, updateUser } from "./controller/user";
 
 const PORT = Bun.env.PORT || 3000;
 
@@ -21,20 +28,20 @@ Bun.serve({
 	routes: {
 		"/cars": {
 			GET: getCars,
-			POST: (request) => new Response(null, { status: 200 }),
+			POST: addCar,
 		},
 		"/cars/:id": {
-			GET: (request) => new Response(null, { status: 200 }),
-			PUT: (request) => new Response(null, { status: 200 }),
-			DELETE: (request) => new Response(null, { status: 200 }),
+			GET: getCar,
+			PUT: updateCar,
+			DELETE: deleteCar,
 		},
 		"/users": {
-			POST: (request) => new Response(null, { status: 200 }),
+			POST: addUser,
 		},
 		"/users/:id": {
-			GET: (request) => new Response(null, { status: 200 }),
-			PUT: (request) => new Response(null, { status: 200 }),
-			DELETE: (request) => new Response(null, { status: 200 }),
+			GET: getUser,
+			PUT: updateUser,
+			DELETE: deleteUser,
 		},
 		"/brands": {
 			GET: getBrands,
