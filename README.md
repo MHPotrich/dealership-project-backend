@@ -1,6 +1,56 @@
 # dealership-project-backend
 Service created to manage a dealership builded with Bun and SQLite.
 
+## Requeriments
+
+## Routes
+
+### Brands
+
+* Get - `/brands`:
+
+* Post - `/brands`:
+
+* Get - `/brands/<brand-id>`:
+
+* Put - `/brands/<brand-id>`:
+
+* Delete - `/brands/<brand-id>`:
+
+### Users
+
+* Post - `/users`:
+
+* Get - `/users/<user-id>`:
+
+* Put - `/users/<user-id>`:
+
+* Delete - `/users/<user-id>`:
+
+### Models
+
+* Get - `/models`:
+
+* Post - `/models`:
+
+* Get - `/models/<model-id>`:
+
+* Put - `/models/<model-id>`:
+
+* Delete - `/models/<model-id>`:
+
+### Cars
+
+* Get - `/cars`:
+
+* Post - `/cars`:
+
+* Get - `/cars/<car-id>`:
+
+* Put - `/cars/<car-id>`:
+
+* Delete - `/cars/<car-id>`:
+
 ## Database tables 
 
 ### Brand:
