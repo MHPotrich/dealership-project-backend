@@ -30,17 +30,19 @@ test("controller - getModel", async () => {
 test("controller - addModel", async () => {
 	let testRequest = new Object();
 
-	testRequest.json({
-		"name": "test",
-		"brand": 1,
-		"year": 2025,
-		"transmission": "test",
-		"drivetrain": "test",
-		"engine": "test",
-		"vin": "vin",
-		"doors": 2,
-		"seating": 2,
-		"horse_power": 1
+	testRequest.json = async () => new Promise((resolve, reject) => {
+		resolve({
+			"name": "test",
+			"brand": 1,
+			"year": 2025,
+			"transmission": "test",
+			"drivetrain": "test",
+			"engine": "test",
+			"vin": "vin",
+			"doors": 2,
+			"seating": 2,
+			"horse_power": 1
+		});
 	});
 
 	const RESPONSE = async addModel(testRequest);
@@ -53,6 +55,13 @@ test("controller - updateModel", async () => {
 	
 	testRequest.params = new Object();
 	testRequest.params.id = 1;
+
+	testRequest.json = async () => new Promise((resolve, reject) => {
+		resolve({
+			"year": 2023,
+		});
+	});
+
 
 	const RESPONSE = await updateModel(testRequest);
 
