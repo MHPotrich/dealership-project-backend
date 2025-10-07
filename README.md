@@ -1,4 +1,4 @@
-# dealership-project-backend
+# Dealership Project Backend
 Service created to manage a dealership builded with Bun and SQLite.
 
 ## Requeriments
