@@ -14,7 +14,7 @@ test("controller - addUser", async () => {
 	});
 
 	const RESPONSE = await addUser(testRequest);
-	
+
 	expect(RESPONSE.status).toBe(201);
 });
 
@@ -25,11 +25,12 @@ test("controller - getUser", async () => {
 	testRequest.params.id = 1;
 	testRequest.url = "http://localhost/user?password=test123";
 
-	const RESPONSE = await getUser(testRequest);
+  const RESPONSE = await getUser(testRequest);
+  const jsonResponse = await RESPONSE.json();
 
-	expect(await RESPONSE.json()).toHaveProperty("first_name");
-	expect(await RESPONSE.json()).toHaveProperty("last_name");
-	expect(await RESPONSE.json()).toHaveProperty("email");
+	expect(jsonResponse).toHaveProperty("first_name");
+	expect(jsonResponse).toHaveProperty("last_name");
+	expect(jsonResponse).toHaveProperty("email");
 });
 
 test("controller - updateUser", async () => {

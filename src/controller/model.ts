@@ -7,7 +7,7 @@ const MODELS_DB_TABLE: string = "model";
 
 export function getModels(): Response {
 	return Response.json({
-		brands: getDatabaseInstance()
+		models: getDatabaseInstance()
 			.query(`SELECT * FROM ${MODELS_DB_TABLE}`)
 			.all(),
 	});
@@ -35,7 +35,7 @@ export async function addModel(request: BunRequest): Promise<Response> {
 		doors: number;
 		seating: number;
 		horse_power: number;
-	} = await request.json();
+  } = await request.json();
 
 	if (
 		REQUEST_BODY.name === null ||
