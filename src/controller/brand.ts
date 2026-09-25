@@ -1,58 +1,65 @@
 import type { BunRequest } from "bun";
-import { getDatabaseInstance } from "../database";
 import { getResponseNotFound } from "../utils";
-
-const BRANDS_DB_TABLE: string = "brand";
+import { deleteBrand as deleteBrandRepository, updateBrand as updateBrandRepository, addBrand as addBrandRepository, getBrand as getBrandRepository, getBrands as getBrandsRepository } from "../repository/brand";
+import { Brand } from "../entity/brand";
 
 export function getBrands(): Response {
+  const brands: Array<Brand> = getBrandsRepository();
+
 	return Response.json({
-		brands: getDatabaseInstance()
-			.query(`SELECT * FROM ${BRANDS_DB_TABLE}`)
-			.all(),
+		brands: brands
 	});
 }
 
 export function getBrand(request: BunRequest): Response {
-	const TARGET_ID: number = parseInt(request.params.id);
+  const brandId: number = parseInt(request.params.id);
+  const brand: Brand = getBrandRepository(brandId);
 
-	return Response.json(
-		getDatabaseInstance()
-			.query(`SELECT * FROM ${BRANDS_DB_TABLE} WHERE id = ?`)
-			.get(TARGET_ID)
-	);
+  return Response.json({
+    id: brand.getId(),
+    name: brand.getName()
+	});
 }
 
 export async function addBrand(request: BunRequest): Promise<Response> {
-	const REQUEST_BODY: { name: string | null } = await request.json();
+  const requestBody: { name: string | null } = await request.json();
+  let statusCode: number = 201;
 
-	if (!REQUEST_BODY.name) return getResponseNotFound();
+	if (!requestBody.name) return getResponseNotFound();
 
-	getDatabaseInstance()
-		.query(`INSERT INTO ${BRANDS_DB_TABLE} (name) VALUES (?)`)
-		.run(REQUEST_BODY.name);
+  const addSuccess: Boolean = addBrandRepository(requestBody.name);
 
-	return new Response(null, { status: 201 });
+  if (!addSuccess) {
+    statusCode = 505;
+  }
+
+	return new Response(null, { status: statusCode });
 }
 
 export async function updateBrand(request: BunRequest): Promise<Response> {
-	const REQUEST_BODY: { name: string } = await request.json();
-	const TARGET_ID: number = parseInt(request.params.id);
+	const requestBody: { name: string } = await request.json();
+  const brandId: number = parseInt(request.params.id);
+  let statusCode: number = 201;
 
-	if (!REQUEST_BODY.name) return getResponseNotFound();
+	if (!requestBody.name) return getResponseNotFound();
 
-	getDatabaseInstance()
-		.query(`UPDATE ${BRANDS_DB_TABLE} SET name = ? WHERE id = ?`)
-		.run(REQUEST_BODY.name, TARGET_ID);
+  const updateSuccess: Boolean = updateBrandRepository(brandId, requestBody.name);
 
-	return new Response(null, { status: 201 });
+  if (!updateSuccess) {
+    statusCode = 505;
+  }
+
+	return new Response(null, { status: statusCode });
 }
 
 export function deleteBrand(request: BunRequest): Response {
-	const TARGET_ID: number = parseInt(request.params.id);
+	const brandId: number = parseInt(request.params.id);
+  const deleteSuccess: Boolean = deleteBrandRepository(brandId);
+  let statusCode: number = 201;
 
-	getDatabaseInstance()
-		.query(`DELETE FROM ${BRANDS_DB_TABLE} WHERE id = ?`)
-		.get(TARGET_ID);
+  if (!deleteSuccess) {
+    statusCode = 505;
+  }
 
-	return new Response(null, { status: 201 });
+	return new Response(null, { status: statusCode });
 }
