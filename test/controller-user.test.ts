@@ -6,8 +6,8 @@ test("controller - addUser", async () => {
 
 	testRequest.json = async () => new Promise((resolve, reject) => {
 		resolve({
-			"first_name": "test",
-			"last_name": "test",
+			"firstName": "test",
+			"lastName": "test",
 			"email": "test@test.com",
 			"password": "test123"
 		});
@@ -28,8 +28,8 @@ test("controller - getUser", async () => {
   const RESPONSE = await getUser(testRequest);
   const jsonResponse = await RESPONSE.json();
 
-	expect(jsonResponse).toHaveProperty("first_name");
-	expect(jsonResponse).toHaveProperty("last_name");
+	expect(jsonResponse).toHaveProperty("firstName");
+	expect(jsonResponse).toHaveProperty("lastName");
 	expect(jsonResponse).toHaveProperty("email");
 });
 
