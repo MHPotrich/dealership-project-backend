@@ -1,88 +1,64 @@
 import type { BunRequest } from "bun";
-import { getDatabaseInstance } from "../database";
 import { getResponseNotFound } from "../utils";
-import { Database } from "bun:sqlite";
+import { User } from "../entity/user";
+import { deleteUser as deleteUserRepository, updateUser as updateUserRepository, getUser as getUserRepository, addUser as addUserRepository } from "../repository/user";
 
-const USERS_DB_TABLE: string = "user";
+export async function addUser(request: BunRequest): Promise<Response> {
+  const requestBody: {
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+  } = await request.json();
+  let statusCode: number = 201;
+  const newUser: User = new User(requestBody.firstName, requestBody.lastName, requestBody.email);
+
+  await newUser.setPassword(requestBody.password);
+
+	if (!newUser.isValid()) return getResponseNotFound();
+
+  const addSuccess: Boolean = addUserRepository(newUser);
+
+  if (!addSuccess) {
+    statusCode = 505;
+  }
+
+	return new Response(null, { status: statusCode });
+}
 
 export async function getUser(request: BunRequest): Promise<Response> {
-	const THIS_URL: URL = new URL(request.url);
-	const PASSWORD: string = THIS_URL.searchParams.get("password") || "";
-	const DB_USER: { password: string } | null = getDatabaseInstance()
-		.query(`SELECT * FROM ${USERS_DB_TABLE} WHERE id = ?`)
-		.get(request.params.id);
+	const url: URL = new URL(request.url);
+	const password: string = url.searchParams.get("password") || "";
+  const repositoryUser: User | null = await getUserRepository(password, request.params.id);
 
-	if (DB_USER == null) return getResponseNotFound();
-
-	const IS_PASSWORD_CORRECT: boolean = await Bun.password.verify(
-		PASSWORD,
-		DB_USER.password
-	);
-
-	if (IS_PASSWORD_CORRECT)
-		return Response.json(
-			getDatabaseInstance()
-				.query(`SELECT * FROM ${USERS_DB_TABLE} WHERE id = ?`)
-				.get(request.params.id)
-		);
+  if (repositoryUser !== null) {
+    return Response.json({
+      firstName: repositoryUser.getFirstName(),
+      lastName: repositoryUser.getLastName(),
+      email: repositoryUser.getEmail()
+    });
+  }
 
 	return getResponseNotFound();
 }
 
-export async function addUser(request: BunRequest): Promise<Response> {
-	const REQUEST_BODY: {
-		first_name: string;
-		last_name: string;
-		email: string;
-		password: string;
-	} = await request.json();
-
-	if (
-		(REQUEST_BODY.first_name === null || REQUEST_BODY.last_name === null,
-		REQUEST_BODY.email === null || REQUEST_BODY.password === null)
-	)
-		return getResponseNotFound();
-
-	const HASH_PASSWORD: string = await Bun.password.hash(
-		REQUEST_BODY.password
-	);
-
-	getDatabaseInstance()
-		.query(
-			`INSERT INTO ${USERS_DB_TABLE} (first_name, last_name, email, password) VALUES (?, ?, ?, ?)`
-		)
-		.run(
-			REQUEST_BODY.first_name,
-			REQUEST_BODY.last_name,
-			REQUEST_BODY.email,
-			HASH_PASSWORD
-		);
-
-	return new Response(null, { status: 201 });
-}
-
 export async function updateUser(request: BunRequest): Promise<Response> {
-	const REQUEST_BODY: object = await request.json();
-	const TARGET_ID: number = parseInt(request.params.id);
-	const DATABASE_INSTANCE: Database = getDatabaseInstance();
+	const requestBody: object = await request.json();
+	const userId: number = parseInt(request.params.id);
+  const updateSuccess: Boolean = updateUserRepository(userId, requestBody);
+  let statusCode: number = 201;
 
-	for (const [key, value] of Object.entries(REQUEST_BODY)) {
-		if (key !== "id") {
-			DATABASE_INSTANCE.query(
-				`UPDATE ${USERS_DB_TABLE} SET ${key} = ? WHERE id = ?`
-			).run(value, TARGET_ID);
-		}
-	}
+  if (!updateSuccess) statusCode = 500;
 
-	return new Response(null, { status: 201 });
+	return new Response(null, { status: statusCode });
 }
 
 export function deleteUser(request: BunRequest): Response {
-	const TARGET_ID: number = parseInt(request.params.id);
+	const userId: number = parseInt(request.params.id);
+  const deleteSuccess: Boolean = deleteUserRepository(userId);
+  let statusCode: number = 201;
 
-	getDatabaseInstance()
-		.query(`DELETE FROM ${USERS_DB_TABLE} WHERE id = ?`)
-		.get(TARGET_ID);
+  if (!deleteSuccess) statusCode = 500;
 
-	return new Response(null, { status: 201 });
+	return new Response(null, { status: statusCode });
 }
