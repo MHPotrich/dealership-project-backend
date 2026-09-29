@@ -2,62 +2,62 @@ import { test, expect } from "bun:test";
 import { getUser, addUser, updateUser, deleteUser } from "../src/controller/user.ts";
 
 test("controller - addUser", async () => {
-	let testRequest = new Object();
+  const testRequest = {
+    json: async () => new Promise((resolve, reject) => {
+      resolve({
+        "firstName": "test",
+        "lastName": "test",
+        "email": "test@test.com",
+        "password": "test123"
+      });
+    })
+  };
+  const response = await addUser(testRequest);
 
-	testRequest.json = async () => new Promise((resolve, reject) => {
-		resolve({
-			"firstName": "test",
-			"lastName": "test",
-			"email": "test@test.com",
-			"password": "test123"
-		});
-	});
-
-	const RESPONSE = await addUser(testRequest);
-
-	expect(RESPONSE.status).toBe(201);
+  expect(response.status).toBe(201);
 });
 
 test("controller - getUser", async () => {
-	let testRequest = new Object();
+  const testRequest = {
+    params: {
+      id: 1
+    },
+    url: "http://localhost/user?password=test123"
+  };
 
-	testRequest.params = new Object();
-	testRequest.params.id = 1;
-	testRequest.url = "http://localhost/user?password=test123";
+  const response = await getUser(testRequest);
+  const jsonResponse = await response.json();
 
-  const RESPONSE = await getUser(testRequest);
-  const jsonResponse = await RESPONSE.json();
-
-	expect(jsonResponse).toHaveProperty("firstName");
-	expect(jsonResponse).toHaveProperty("lastName");
-	expect(jsonResponse).toHaveProperty("email");
+  expect(jsonResponse).toHaveProperty("firstName");
+  expect(jsonResponse).toHaveProperty("lastName");
+  expect(jsonResponse).toHaveProperty("email");
 });
 
 test("controller - updateUser", async () => {
-	let testRequest = new Object();
+  const testRequest = {
+    params: {
+      id: 1
+    },
+    json: async () => new Promise((resolve, reject) => {
+      resolve({
+        "firstName": "test updated",
+        "lastName": "test updated",
+        "email": "testUpdated@test.com"
+      });
+    })
+  };
+  const response = await updateUser(testRequest);
 
-	testRequest.params = new Object();
-	testRequest.params.id = 1;
-	testRequest.json = async () => new Promise((resolve, reject) => {
-		resolve({
-			"first_name": "test updated",
-			"last_name": "test updated",
-			"email": "testUpdated@test.com"
-		});
-	});
-
-	const RESPONSE = await updateUser(testRequest);
-
-	expect(RESPONSE.status).toBe(201);
+  expect(response.status).toBe(201);
 });
 
 test("controller - deleteUser", () => {
-	let testRequest = new Object();
+  const testRequest = {
+    params: {
+      id: 1
+    }
+  };
+  const response = deleteUser(testRequest);
 
-	testRequest.params = new Object();
-	testRequest.params.id = 1;
-
-	const RESPONSE = deleteUser(testRequest);
-
-	expect(RESPONSE.status).toBe(201);
+  expect(response.status).toBe(201);
 });

@@ -1,64 +1,63 @@
 import { test, expect } from "bun:test";
-import { BunRequest } from "bun";
 import { getBrands, getBrand, addBrand, updateBrand, deleteBrand } from "../src/controller/brand.ts";
 
-const BRAND_NAME_TEST = "test-brand";
+const brandNameTest = "test-brand";
 
 test("controller - getBrands", async () => {
-	const RESPONSE: Response = await getBrands().json();
+	const response: Response = await getBrands().json();
 
-	expect(RESPONSE).toHaveProperty("brands");
+	expect(response).toHaveProperty("brands");
 });
 
 test("controller - addBrand", async () => {
-	let testRequest = new Object();
+  let testRequest = {
+    json: async () => new Promise((resolve, reject) => {
+  		resolve({
+  			name: brandNameTest
+  		});
+  	})
+	};
+	const response: Response = await addBrand(testRequest);
 
-	testRequest.json = async () => new Promise((resolve, reject) => {
-		resolve({
-			name: BRAND_NAME_TEST
-		});
-	});
-
-	const RESPONSE: Response = await addBrand(testRequest);
-
-	expect(RESPONSE.status).toBe(201);
+	expect(response.status).toBe(201);
 });
 
 test("controller - getBrand", async () => {
-	const TEST_REQUEST = {
+	const testRequest = {
 		params: {
 			id: 1
 		}
 	};
-	const RESPONSE: Response = await getBrand(TEST_REQUEST).json();	
+	const response: Response = await getBrand(testRequest).json();
 
-	expect(RESPONSE).toHaveProperty("id");
-	expect(RESPONSE).toHaveProperty("name");	
+	expect(response).toHaveProperty("id");
+	expect(response).toHaveProperty("name");
 });
 
 test("controller - updateBrand", async () => {
-	let testRequest = new Object();
+  let testRequest = {
+    params: {
+      id: 1
+    },
+    json: async () => new Promise((resolve, reject) => {
+  		resolve({
+  			name: "test update"
+  		});
+  	})
+	};
+	const response = await updateBrand(testRequest);
 
-	testRequest.params = new Object();
-	testRequest.params.id = 1;
-	testRequest.json = async () => new Promise((resolve, reject) => {
-		resolve({
-			name: "test update"
-		});
-	});
-	
-	const RESPONSE = await updateBrand(testRequest);
-
-	expect(RESPONSE.status).toBe(201);
+	expect(response.status).toBe(201);
 });
 
 test("controller - deleteBrand", async () => {
-	const testRequest = new Object();
-	
-	testRequest.params = new Object();
-	testRequest.params.id = 1;
+  const testRequest = {
+    params: {
+      id: 1
+    }
+	};
 
-	const RESPONSE = await deleteBrand(testRequest);
+	const response = deleteBrand(testRequest);
 
-	expect(RESPONSE.status).toBe(201);
+	expect(response.status).toBe(201);
 });
