@@ -2,23 +2,23 @@ import { test, expect } from "bun:test";
 import { getCars, getCar, addCar, updateCar, deleteCar } from "../src/controller/car";
 
 test("controller - addCar", async () => {
-	let testRequest = new Object();
+  const testRequest = {
+    json: async () => new Promise((resolve, reject) => {
+  		resolve({
+  			"listPrice": 99000,
+  			"salePrice": 98000,
+  			"inStock": true,
+  			"model": "test",
+  			"travelledDistance": 5000,
+  			"exteriorColor": "test",
+  			"interiorColor": "test",
+  		});
+  	})
+	};
 
-	testRequest.json = async () => new Promise((resolve, reject) => {
-		resolve({
-			"list_price": 99000,
-			"sale_price": 98000,
-			"in_stock": true,
-			"model": "test",
-			"travelled_distance": 5000,
-			"exterior_color": "test",
-			"interior_color": "test",
-		});
-	});
+	const response = await addCar(testRequest);
 
-	const RESPONSE = await addCar(testRequest);
-
-	expect(RESPONSE.status).toBe(201);
+	expect(response.status).toBe(201);
 });
 
 test("controller - getCars", async () => {
@@ -33,48 +33,47 @@ test("controller - getCars", async () => {
 });
 
 test("controller - getCar", async () => {
-	let testRequest = new Object();
+  const testRequest = {
+    params: {
+      id: 1
+    }
+	};
+  const response = getCar(testRequest);
+  const jsonResponse = await response.json();
 
-	testRequest.params = new Object();
-	testRequest.params.id = 1;
-
-  const RESPONSE = await getCar(testRequest);
-  const jsonResponse = await RESPONSE.json();
-
-	expect(jsonResponse).toHaveProperty("list_price");
-	expect(jsonResponse).toHaveProperty("sale_price");
-	expect(jsonResponse).toHaveProperty("in_stock");
+  expect(response.status).toBe(200);
+	expect(jsonResponse).toHaveProperty("listPrice");
+	expect(jsonResponse).toHaveProperty("salePrice");
+	expect(jsonResponse).toHaveProperty("inStock");
 	expect(jsonResponse).toHaveProperty("model");
-	expect(jsonResponse).toHaveProperty("travelled_distance");
-	expect(jsonResponse).toHaveProperty("exterior_color");
-	expect(jsonResponse).toHaveProperty("interior_color");
+	expect(jsonResponse).toHaveProperty("travelledDistance");
+	expect(jsonResponse).toHaveProperty("exteriorColor");
+	expect(jsonResponse).toHaveProperty("interiorColor");
 });
 
 test("controller - updateCar", async () => {
-	let testRequest = new Object();
+  const testRequest = {
+    params: {
+      id: 1
+    },
+    json: async () => new Promise((resolve, reject) => {
+  		resolve({
+  			"travelledDistance": 6400,
+  		});
+  	})
+	};
+	const response = await updateCar(testRequest);
 
-	testRequest.params = new Object();
-	testRequest.params.id = 1;
-
-	testRequest.json = async () => new Promise((resolve, reject) => {
-		resolve({
-			"travelled_distance": 6400,
-		});
-	});
-
-
-	const RESPONSE = await updateCar(testRequest);
-
-	expect(RESPONSE.status).toBe(201);
+	expect(response.status).toBe(201);
 });
 
 test("controller - deleteCar", async () => {
-	let testRequest = new Object();
+  const testRequest = {
+    params: {
+      id: 1
+    }
+	};
+	const response = deleteCar(testRequest);
 
-	testRequest.params = new Object();
-	testRequest.params.id = 1;
-
-	const RESPONSE = await deleteCar(testRequest);
-
-	expect(RESPONSE.status).toBe(201);
+	expect(response.status).toBe(201);
 });
