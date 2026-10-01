@@ -51,7 +51,7 @@ export async function addCar(request: BunRequest): Promise<Response> {
   const addSuccess: Boolean = addCarRepository(car);
 
   if (!addSuccess) {
-    statusCode = 505;
+    statusCode = 400;
   }
 
 	return new Response(null, { status: statusCode });
@@ -61,10 +61,10 @@ export async function updateCar(request: BunRequest): Promise<Response> {
 	const requestBody: object = await request.json();
 	const carId: number = parseInt(request.params.id);
   const updateSuccess: Boolean = updateCarRepository(carId, requestBody);
-  let statusCode: number = 201;
+  let statusCode: number = 200;
 
   if (!updateSuccess) {
-    statusCode = 505;
+    statusCode = 400;
   }
 
 	return new Response(null, { status: statusCode });
@@ -73,11 +73,11 @@ export async function updateCar(request: BunRequest): Promise<Response> {
 export function deleteCar(request: BunRequest): Response {
 	const carId: number = parseInt(request.params.id);
   const deleteSuccess: boolean = deleteCarRepository(carId);
-  let statusCode = 201;
+  let statusCode = 204;
 
   if (!deleteSuccess) {
-    statusCode = 505;
+    statusCode = 400;
   }
 
-	return new Response(null, { status: 201 });
+  return new Response(null, { status: statusCode });
 }

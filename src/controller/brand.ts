@@ -30,7 +30,7 @@ export async function addBrand(request: BunRequest): Promise<Response> {
   const addSuccess: Boolean = addBrandRepository(requestBody.name);
 
   if (!addSuccess) {
-    statusCode = 505;
+    statusCode = 400;
   }
 
 	return new Response(null, { status: statusCode });
@@ -39,14 +39,14 @@ export async function addBrand(request: BunRequest): Promise<Response> {
 export async function updateBrand(request: BunRequest): Promise<Response> {
 	const requestBody: { name: string } = await request.json();
   const brandId: number = parseInt(request.params.id);
-  let statusCode: number = 201;
+  let statusCode: number = 200;
 
 	if (!requestBody.name) return getResponseNotFound();
 
   const updateSuccess: Boolean = updateBrandRepository(brandId, requestBody.name);
 
   if (!updateSuccess) {
-    statusCode = 505;
+    statusCode = 400;
   }
 
 	return new Response(null, { status: statusCode });
@@ -55,10 +55,10 @@ export async function updateBrand(request: BunRequest): Promise<Response> {
 export function deleteBrand(request: BunRequest): Response {
 	const brandId: number = parseInt(request.params.id);
   const deleteSuccess: Boolean = deleteBrandRepository(brandId);
-  let statusCode: number = 201;
+  let statusCode: number = 204;
 
   if (!deleteSuccess) {
-    statusCode = 505;
+    statusCode = 400;
   }
 
 	return new Response(null, { status: statusCode });

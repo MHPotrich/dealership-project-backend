@@ -38,7 +38,7 @@ export async function addModel(request: BunRequest): Promise<Response> {
   const addSuccess: Boolean = addModelRepository(model);
 
   if (!addSuccess) {
-    statusCode = 505;
+    statusCode = 400;
   }
 
 	return new Response(null, { status: statusCode });
@@ -47,11 +47,11 @@ export async function addModel(request: BunRequest): Promise<Response> {
 export async function updateModel(request: BunRequest): Promise<Response> {
 	const requestBody: object = await request.json();
 	const modelId: number = parseInt(request.params.id);
-  let statusCode: number = 201;
+  let statusCode: number = 200;
   const updateSuccess: Boolean = updateModelRepository(modelId, requestBody);
 
   if (!updateSuccess) {
-    statusCode = 505;
+    statusCode = 400;
   }
 
 	return new Response(null, { status: statusCode });
@@ -60,10 +60,10 @@ export async function updateModel(request: BunRequest): Promise<Response> {
 export function deleteModel(request: BunRequest): Response {
 	const modelId: number = parseInt(request.params.id);
   const deleteSuccess: Boolean = deleteModelRepository(modelId);
-  let statusCode: number = 201;
+  let statusCode: number = 204;
 
   if (!deleteSuccess) {
-    statusCode = 505;
+    statusCode = 400;
   }
 
 	return new Response(null, { status: statusCode });

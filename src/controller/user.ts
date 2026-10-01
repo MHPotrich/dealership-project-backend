@@ -20,7 +20,7 @@ export async function addUser(request: BunRequest): Promise<Response> {
   const addSuccess: Boolean = addUserRepository(newUser);
 
   if (!addSuccess) {
-    statusCode = 505;
+    statusCode = 400;
   }
 
 	return new Response(null, { status: statusCode });
@@ -46,9 +46,9 @@ export async function updateUser(request: BunRequest): Promise<Response> {
 	const requestBody: object = await request.json();
 	const userId: number = parseInt(request.params.id);
   const updateSuccess: Boolean = updateUserRepository(userId, requestBody);
-  let statusCode: number = 201;
+  let statusCode: number = 200;
 
-  if (!updateSuccess) statusCode = 500;
+  if (!updateSuccess) statusCode = 400;
 
 	return new Response(null, { status: statusCode });
 }
@@ -56,9 +56,9 @@ export async function updateUser(request: BunRequest): Promise<Response> {
 export function deleteUser(request: BunRequest): Response {
 	const userId: number = parseInt(request.params.id);
   const deleteSuccess: Boolean = deleteUserRepository(userId);
-  let statusCode: number = 201;
+  let statusCode: number = 204;
 
-  if (!deleteSuccess) statusCode = 500;
+  if (!deleteSuccess) statusCode = 400;
 
 	return new Response(null, { status: statusCode });
 }

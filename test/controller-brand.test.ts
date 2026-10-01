@@ -10,12 +10,12 @@ test("controller brand - getBrands", async () => {
 });
 
 test("controller brand - addBrand", async () => {
-  let testRequest = {
-    json: async () => new Promise((resolve, reject) => {
-  		resolve({
-  			name: brandNameTest
-  		});
-  	})
+	let testRequest = {
+		json: async () => new Promise((resolve, reject) => {
+			resolve({
+				name: brandNameTest
+			});
+		})
 	};
 	const response: Response = await addBrand(testRequest);
 
@@ -31,22 +31,22 @@ test("controller brand - getBrand", async () => {
 });
 
 test("controller brand - updateBrand", async () => {
-  let testRequest = {
-    params: { id: 1 },
-    json: async () => new Promise((resolve, reject) => {
-  		resolve({
-  			name: "test update"
-  		});
-  	})
+	let testRequest = {
+		params: { id: 1 },
+		json: async () => new Promise((resolve, reject) => {
+			resolve({
+				name: "test update"
+			});
+		})
 	};
 	const response = await updateBrand(testRequest);
 
-	expect(response.status).toBe(201);
+	expect(response.status).toBe(200);
 });
 
 test("controller brand - deleteBrand", async () => {
-  const testRequest = { params: { id: 1 } };
+	const testRequest = { params: { id: 1 } };
 	const response = deleteBrand(testRequest);
 
-	expect(response.status).toBe(201);
+	expect(response.status).toBe(204);
 });
