@@ -3,13 +3,13 @@ import { getBrands, getBrand, addBrand, updateBrand, deleteBrand } from "../src/
 
 const brandNameTest = "test-brand";
 
-test("controller - getBrands", async () => {
+test("controller brand - getBrands", async () => {
 	const response: Response = await getBrands().json();
 
 	expect(response).toHaveProperty("brands");
 });
 
-test("controller - addBrand", async () => {
+test("controller brand - addBrand", async () => {
   let testRequest = {
     json: async () => new Promise((resolve, reject) => {
   		resolve({
@@ -22,7 +22,7 @@ test("controller - addBrand", async () => {
 	expect(response.status).toBe(201);
 });
 
-test("controller - getBrand", async () => {
+test("controller brand - getBrand", async () => {
 	const testRequest = {
 		params: {
 			id: 1
@@ -34,7 +34,7 @@ test("controller - getBrand", async () => {
 	expect(response).toHaveProperty("name");
 });
 
-test("controller - updateBrand", async () => {
+test("controller brand - updateBrand", async () => {
   let testRequest = {
     params: {
       id: 1
@@ -50,7 +50,7 @@ test("controller - updateBrand", async () => {
 	expect(response.status).toBe(201);
 });
 
-test("controller - deleteBrand", async () => {
+test("controller brand - deleteBrand", async () => {
   const testRequest = {
     params: {
       id: 1

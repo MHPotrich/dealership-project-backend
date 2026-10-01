@@ -1,7 +1,7 @@
 import { test, expect } from "bun:test";
 import { getUser, addUser, updateUser, deleteUser } from "../src/controller/user.ts";
 
-test("controller - addUser", async () => {
+test("controller user - addUser", async () => {
   const testRequest = {
     json: async () => new Promise((resolve, reject) => {
       resolve({
@@ -17,7 +17,7 @@ test("controller - addUser", async () => {
   expect(response.status).toBe(201);
 });
 
-test("controller - getUser", async () => {
+test("controller user - getUser", async () => {
   const testRequest = {
     params: {
       id: 1
@@ -33,7 +33,7 @@ test("controller - getUser", async () => {
   expect(jsonResponse).toHaveProperty("email");
 });
 
-test("controller - updateUser", async () => {
+test("controller user - updateUser", async () => {
   const testRequest = {
     params: {
       id: 1
@@ -51,7 +51,7 @@ test("controller - updateUser", async () => {
   expect(response.status).toBe(201);
 });
 
-test("controller - deleteUser", () => {
+test("controller user - deleteUser", () => {
   const testRequest = {
     params: {
       id: 1

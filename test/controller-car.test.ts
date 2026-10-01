@@ -1,7 +1,7 @@
 import { test, expect } from "bun:test";
 import { getCars, getCar, addCar, updateCar, deleteCar } from "../src/controller/car";
 
-test("controller - addCar", async () => {
+test("controller car - addCar", async () => {
   const testRequest = {
     json: async () => new Promise((resolve, reject) => {
   		resolve({
@@ -21,7 +21,7 @@ test("controller - addCar", async () => {
 	expect(response.status).toBe(201);
 });
 
-test("controller - getCars", async () => {
+test("controller car - getCars", async () => {
   const limit = 1;
   const offset = 0;
 
@@ -32,7 +32,7 @@ test("controller - getCars", async () => {
 	expect(responseModels).toHaveProperty("cars");
 });
 
-test("controller - getCar", async () => {
+test("controller car - getCar", async () => {
   const testRequest = {
     params: {
       id: 1
@@ -51,7 +51,7 @@ test("controller - getCar", async () => {
 	expect(jsonResponse).toHaveProperty("interiorColor");
 });
 
-test("controller - updateCar", async () => {
+test("controller car - updateCar", async () => {
   const testRequest = {
     params: {
       id: 1
@@ -67,7 +67,7 @@ test("controller - updateCar", async () => {
 	expect(response.status).toBe(201);
 });
 
-test("controller - deleteCar", async () => {
+test("controller car - deleteCar", async () => {
   const testRequest = {
     params: {
       id: 1

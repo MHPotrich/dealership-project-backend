@@ -1,7 +1,7 @@
 import { test, expect } from "bun:test";
 import { getModels, getModel, addModel, updateModel, deleteModel } from "../src/controller/model";
 
-test("controller - addModel", async () => {
+test("controller model - addModel", async () => {
   const testRequest = {
     json: async () => new Promise((resolve, reject) => {
   		resolve({
@@ -23,13 +23,13 @@ test("controller - addModel", async () => {
 	expect(response.status).toBe(201);
 });
 
-test("controller - getModels", async () => {
+test("controller model - getModels", async () => {
 	const responseModels = await getModels().json();
 
 	expect(responseModels).toHaveProperty("models");
 });
 
-test("controller - getModel", async () => {
+test("controller model - getModel", async () => {
   const testRequest = {
     params: {
       id: 1
@@ -51,7 +51,7 @@ test("controller - getModel", async () => {
 	expect(jsonResponse).toHaveProperty("horsePower");
 });
 
-test("controller - updateModel", async () => {
+test("controller model - updateModel", async () => {
   const testRequest = {
     params: {
       id: 1
@@ -67,7 +67,7 @@ test("controller - updateModel", async () => {
 	expect(response.status).toBe(201);
 });
 
-test("controller - deleteModel", async () => {
+test("controller model - deleteModel", async () => {
   const testRequest = {
     params: {
       id: 1
