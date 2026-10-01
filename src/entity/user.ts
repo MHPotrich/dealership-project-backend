@@ -4,10 +4,10 @@ export class User {
 	private email: string;
   private password: string | null;
 
-  constructor(newFirstName: string, newLastName: string, newEmail: string) {
-    this.firstName = newFirstName;
-    this.lastName = newLastName;
-    this.email = newEmail;
+  constructor(firstName: string, lastName: string, email: string) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
   }
 
   private isEmailValid(): Boolean {

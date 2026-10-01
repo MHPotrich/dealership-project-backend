@@ -10,17 +10,17 @@ export class Model {
   private seating: number;
   private horsePower: number;
 
-  constructor(newName: string, newBrand: number, newYear: number, newTransmission: string, newDrivetrain: string, newEngine: string, newVin: string, newDoors: number, newSeating: number, newHorsePower: number) {
-    this.name = newName;
-    this.brand = newBrand;
-    this.year = newYear;
-    this.transmission = newTransmission;
-    this.drivetrain = newDrivetrain;
-    this.engine = newEngine;
-    this.vin = newVin;
-    this.doors = newDoors;
-    this.seating = newSeating;
-    this.horsePower = newHorsePower;
+  constructor(name: string, brand: number, year: number, transmission: string, drivetrain: string, engine: string, vin: string, doors: number, seating: number, horsePower: number) {
+    this.name = name;
+    this.brand = brand;
+    this.year = year;
+    this.transmission = transmission;
+    this.drivetrain = drivetrain;
+    this.engine = engine;
+    this.vin = vin;
+    this.doors = doors;
+    this.seating = seating;
+    this.horsePower = horsePower;
   }
 
   public getName(): string {

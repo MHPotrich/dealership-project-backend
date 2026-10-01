@@ -7,14 +7,14 @@ export class Car {
 	private exteriorColor: string;
 	private interiorColor: string;
 
-	constructor(newListPrice: number, newSalePrice: number, newInStock: boolean, newModel: string, newTravelledDistance: number, newExteriorColor: string, newInteriorColor: string) {
-		this.listPrice = newListPrice;
-		this.salePrice = newSalePrice;
-		this.inStock = newInStock;
-		this.model = newModel;
-		this.travelledDistance = newTravelledDistance;
-		this.exteriorColor = newExteriorColor;
-		this.interiorColor = newInteriorColor;
+	constructor(listPrice: number, salePrice: number, inStock: boolean, model: number, travelledDistance: number, exteriorColor: string, interiorColor: string) {
+		this.listPrice = listPrice;
+		this.salePrice = salePrice;
+		this.inStock = inStock;
+		this.model = model;
+		this.travelledDistance = travelledDistance;
+		this.exteriorColor = exteriorColor;
+		this.interiorColor = interiorColor;
 	}
 
 	public getListPrice(): number {
