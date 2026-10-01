@@ -19,12 +19,9 @@ test("controller user - addUser", async () => {
 
 test("controller user - getUser", async () => {
   const testRequest = {
-    params: {
-      id: 1
-    },
+    params: { id: 1 },
     url: "http://localhost/user?password=test123"
   };
-
   const response = await getUser(testRequest);
   const jsonResponse = await response.json();
 
@@ -35,9 +32,7 @@ test("controller user - getUser", async () => {
 
 test("controller user - updateUser", async () => {
   const testRequest = {
-    params: {
-      id: 1
-    },
+    params: { id: 1 },
     json: async () => new Promise((resolve, reject) => {
       resolve({
         "firstName": "test updated",
@@ -52,11 +47,7 @@ test("controller user - updateUser", async () => {
 });
 
 test("controller user - deleteUser", () => {
-  const testRequest = {
-    params: {
-      id: 1
-    }
-  };
+  const testRequest = { params: { id: 1 } };
   const response = deleteUser(testRequest);
 
   expect(response.status).toBe(201);

@@ -33,11 +33,7 @@ test("controller car - getCars", async () => {
 });
 
 test("controller car - getCar", async () => {
-  const testRequest = {
-    params: {
-      id: 1
-    }
-	};
+  const testRequest = { params: { id: 1 } };
   const response = getCar(testRequest);
   const jsonResponse = await response.json();
 
@@ -53,9 +49,7 @@ test("controller car - getCar", async () => {
 
 test("controller car - updateCar", async () => {
   const testRequest = {
-    params: {
-      id: 1
-    },
+    params: { id: 1 },
     json: async () => new Promise((resolve, reject) => {
   		resolve({
   			"travelledDistance": 6400,
@@ -68,11 +62,7 @@ test("controller car - updateCar", async () => {
 });
 
 test("controller car - deleteCar", async () => {
-  const testRequest = {
-    params: {
-      id: 1
-    }
-	};
+  const testRequest = { params: { id: 1 } };
 	const response = deleteCar(testRequest);
 
 	expect(response.status).toBe(201);

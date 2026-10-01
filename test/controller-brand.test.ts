@@ -23,11 +23,7 @@ test("controller brand - addBrand", async () => {
 });
 
 test("controller brand - getBrand", async () => {
-	const testRequest = {
-		params: {
-			id: 1
-		}
-	};
+	const testRequest = { params: { id: 1 } };
 	const response: Response = await getBrand(testRequest).json();
 
 	expect(response).toHaveProperty("id");
@@ -36,9 +32,7 @@ test("controller brand - getBrand", async () => {
 
 test("controller brand - updateBrand", async () => {
   let testRequest = {
-    params: {
-      id: 1
-    },
+    params: { id: 1 },
     json: async () => new Promise((resolve, reject) => {
   		resolve({
   			name: "test update"
@@ -51,12 +45,7 @@ test("controller brand - updateBrand", async () => {
 });
 
 test("controller brand - deleteBrand", async () => {
-  const testRequest = {
-    params: {
-      id: 1
-    }
-	};
-
+  const testRequest = { params: { id: 1 } };
 	const response = deleteBrand(testRequest);
 
 	expect(response.status).toBe(201);

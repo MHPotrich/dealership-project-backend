@@ -30,12 +30,7 @@ test("controller model - getModels", async () => {
 });
 
 test("controller model - getModel", async () => {
-  const testRequest = {
-    params: {
-      id: 1
-    }
-	};
-
+  const testRequest = { params: { id: 1 } };
   const response = getModel(testRequest);
   const jsonResponse = await response.json();
 
@@ -53,9 +48,7 @@ test("controller model - getModel", async () => {
 
 test("controller model - updateModel", async () => {
   const testRequest = {
-    params: {
-      id: 1
-    },
+    params: { id: 1 },
     json: async () => new Promise((resolve, reject) => {
   		resolve({
   			"year": 2023,
@@ -68,11 +61,7 @@ test("controller model - updateModel", async () => {
 });
 
 test("controller model - deleteModel", async () => {
-  const testRequest = {
-    params: {
-      id: 1
-    }
-	};
+  const testRequest = { params: { id: 1 } };
 	const response = deleteModel(testRequest);
 
 	expect(response.status).toBe(201);
