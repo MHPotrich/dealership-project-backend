@@ -2,7 +2,7 @@ export class Car {
 	private listPrice: number;
 	private salePrice: number;
 	private inStock: boolean;
-	private model: string;
+	private model: number;
 	private travelledDistance: number;
 	private exteriorColor: string;
 	private interiorColor: string;
@@ -41,11 +41,11 @@ export class Car {
 		this.inStock = inStock;
 	}
 
-	public getModel(): string {
+	public getModel(): number {
 		return this.model;
 	}
 
-	public setModel(model: string): void {
+	public setModel(model: number): void {
 		this.model = model;
 	}
 
@@ -82,7 +82,7 @@ export class Car {
 	}
 
 	private isModelValid(): boolean {
-		return this.model !== null && this.model.length > 3;
+		return this.model !== null && this.model >= 0;
 	}
 
 	private isTravelledDistanceValid(): boolean {

@@ -8,7 +8,7 @@ test("controller car - addCar", async () => {
   			"listPrice": 99000,
   			"salePrice": 98000,
   			"inStock": true,
-  			"model": "test",
+  			"model": 1,
   			"travelledDistance": 5000,
   			"exteriorColor": "test",
   			"interiorColor": "test",

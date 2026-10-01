@@ -37,7 +37,7 @@ export async function addCar(request: BunRequest): Promise<Response> {
 		listPrice: number;
 		salePrice: number;
 		inStock: boolean;
-		model: string;
+		model: number;
 		travelledDistance: number;
 		exteriorColor: string;
 		interiorColor: string;
