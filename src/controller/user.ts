@@ -2,6 +2,7 @@ import type { BunRequest } from "bun";
 import { getResponseNotFound } from "../utils";
 import { User } from "../entity/user";
 import { deleteUser as deleteUserRepository, updateUser as updateUserRepository, getUser as getUserRepository, addUser as addUserRepository } from "../repository/user";
+import { UserDto } from "../dto/user";
 
 export async function addUser(request: BunRequest): Promise<Response> {
   const requestBody: {
@@ -29,14 +30,17 @@ export async function addUser(request: BunRequest): Promise<Response> {
 export async function getUser(request: BunRequest): Promise<Response> {
 	const url: URL = new URL(request.url);
 	const password: string = url.searchParams.get("password") || "";
-  const repositoryUser: User | null = await getUserRepository(password, request.params.id);
+  const repositoryUser: User | null | undefined = await getUserRepository(password, request.params.id);
 
-  if (repositoryUser !== null) {
-    return Response.json({
-      firstName: repositoryUser.getFirstName(),
-      lastName: repositoryUser.getLastName(),
-      email: repositoryUser.getEmail()
-    });
+  if (repositoryUser) {
+    const userDto = new UserDto(
+      repositoryUser.getFirstName(),
+      repositoryUser.getLastName(),
+      repositoryUser.getEmail(),
+      repositoryUser.getId()
+    );
+
+    return Response.json(userDto);
   }
 
 	return getResponseNotFound();
@@ -46,11 +50,30 @@ export async function updateUser(request: BunRequest): Promise<Response> {
 	const requestBody: object = await request.json();
 	const userId: number = parseInt(request.params.id);
   const updateSuccess: Boolean = updateUserRepository(userId, requestBody);
-  let statusCode: number = 200;
 
-  if (!updateSuccess) statusCode = 400;
+  if (updateSuccess) {
+    const repositoryUser: User | null | undefined = await getUserRepository(request.params.password, String(userId));
 
-	return new Response(null, { status: statusCode });
+    if (repositoryUser === null) {
+      return new Response(null, { status: 500 });
+    }
+
+    // wrong password
+    if (repositoryUser === undefined) {
+      return new Response(null, { status: 401 });
+    }
+
+    const userDto = new UserDto(
+      repositoryUser.getFirstName(),
+      repositoryUser.getLastName(),
+      repositoryUser.getEmail(),
+      repositoryUser.getId()
+    );
+
+    return Response.json(userDto);
+  }
+
+	return new Response(null, { status: 400 });
 }
 
 export function deleteUser(request: BunRequest): Response {

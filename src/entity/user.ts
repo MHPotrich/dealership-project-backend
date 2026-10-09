@@ -1,13 +1,15 @@
 export class User {
+  public id?: number;
   private firstName: string;
-	private lastName: string;
-	private email: string;
+  private lastName: string;
+  private email: string;
   private password: string | null;
 
-  constructor(firstName: string, lastName: string, email: string) {
+  constructor(firstName: string, lastName: string, email: string, id?: number) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
+    this.id = id;
   }
 
   private isEmailValid(): Boolean {
@@ -66,5 +68,9 @@ export class User {
 
   public setHashPassword(hashedPassword: string): void {
     this.password = hashedPassword;
+  }
+
+  public getId(): number | undefined {
+    return this.id;
   }
 }

@@ -1,8 +1,8 @@
 export class Brand {
-  private id: number;
+  private id?: number;
   private name: string;
 
-  constructor(id: number, name: string) {
+  constructor(name: string, id?: number) {
     this.name = name;
     this.id = id;
   }
@@ -15,7 +15,7 @@ export class Brand {
     this.name = newName;
   }
 
-  public getId(): number {
+  public getId(): number | undefined {
     return this.id;
   }
 }

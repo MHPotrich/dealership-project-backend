@@ -1,108 +1,114 @@
 export class Car {
-	private listPrice: number;
-	private salePrice: number;
-	private inStock: boolean;
-	private model: number;
-	private travelledDistance: number;
-	private exteriorColor: string;
-	private interiorColor: string;
+    private id?: number;
+    private listPrice: number;
+    private salePrice: number;
+    private inStock: boolean;
+    private model: number;
+    private travelledDistance: number;
+    private exteriorColor: string;
+    private interiorColor: string;
 
-	constructor(listPrice: number, salePrice: number, inStock: boolean, model: number, travelledDistance: number, exteriorColor: string, interiorColor: string) {
-		this.listPrice = listPrice;
-		this.salePrice = salePrice;
-		this.inStock = inStock;
-		this.model = model;
-		this.travelledDistance = travelledDistance;
-		this.exteriorColor = exteriorColor;
-		this.interiorColor = interiorColor;
-	}
+    constructor(listPrice: number, salePrice: number, inStock: boolean, model: number, travelledDistance: number, exteriorColor: string, interiorColor: string, id?: number) {
+        this.listPrice = listPrice;
+        this.salePrice = salePrice;
+        this.inStock = inStock;
+        this.model = model;
+        this.travelledDistance = travelledDistance;
+        this.exteriorColor = exteriorColor;
+        this.interiorColor = interiorColor;
+        this.id = id;
+    }
 
-	public getListPrice(): number {
-		return this.listPrice;
-	}
+    public getListPrice(): number {
+        return this.listPrice;
+    }
 
-	public setListPrice(listPrice: number): void {
-		this.listPrice = listPrice;
-	}
+    public setListPrice(listPrice: number): void {
+        this.listPrice = listPrice;
+    }
 
-	public getSalePrice(): number {
-		return this.salePrice;
-	}
+    public getSalePrice(): number {
+        return this.salePrice;
+    }
 
-	public setSalePrice(salePrice: number): void {
-		this.salePrice = salePrice;
-	}
+    public setSalePrice(salePrice: number): void {
+        this.salePrice = salePrice;
+    }
 
-	public getInStock(): boolean {
-		return this.inStock;
-	}
+    public getInStock(): boolean {
+        return this.inStock;
+    }
 
-	public setInStock(inStock: boolean): void {
-		this.inStock = inStock;
-	}
+    public setInStock(inStock: boolean): void {
+        this.inStock = inStock;
+    }
 
-	public getModel(): number {
-		return this.model;
-	}
+    public getModel(): number {
+        return this.model;
+    }
 
-	public setModel(model: number): void {
-		this.model = model;
-	}
+    public setModel(model: number): void {
+        this.model = model;
+    }
 
-	public getTravelledDistance(): number {
-		return this.travelledDistance;
-	}
+    public getTravelledDistance(): number {
+        return this.travelledDistance;
+    }
 
-	public setTravelledDistance(travelledDistance: number): void {
-		this.travelledDistance = travelledDistance;
-	}
+    public setTravelledDistance(travelledDistance: number): void {
+        this.travelledDistance = travelledDistance;
+    }
 
-	public getExteriorColor(): string {
-		return this.exteriorColor;
-	}
+    public getExteriorColor(): string {
+        return this.exteriorColor;
+    }
 
-	public setExteriorColor(exteriorColor: string): void {
-		this.exteriorColor = exteriorColor;
-	}
+    public setExteriorColor(exteriorColor: string): void {
+        this.exteriorColor = exteriorColor;
+    }
 
-	public getInteriorColor(): string {
-		return this.interiorColor;
-	}
+    public getInteriorColor(): string {
+        return this.interiorColor;
+    }
 
-	public setInteriorColor(interiorColor: string): void {
-		this.interiorColor = interiorColor;
-	}
+    public setInteriorColor(interiorColor: string): void {
+        this.interiorColor = interiorColor;
+    }
 
-	private isListPriceValid(): boolean {
-		return this.listPrice !== null && this.listPrice >= 0;
-	}
+    private isListPriceValid(): boolean {
+        return this.listPrice !== null && this.listPrice >= 0;
+    }
 
-	private isSalePriceValid(): boolean {
-		return this.salePrice !== null && this.salePrice >= 0;
-	}
+    private isSalePriceValid(): boolean {
+        return this.salePrice !== null && this.salePrice >= 0;
+    }
 
-	private isModelValid(): boolean {
-		return this.model !== null && this.model >= 0;
-	}
+    private isModelValid(): boolean {
+        return this.model !== null && this.model >= 0;
+    }
 
-	private isTravelledDistanceValid(): boolean {
-		return this.travelledDistance !== null && this.travelledDistance >= 0;
-	}
+    private isTravelledDistanceValid(): boolean {
+        return this.travelledDistance !== null && this.travelledDistance >= 0;
+    }
 
-	private isExteriorColorValid(): boolean {
-		return this.exteriorColor !== null && this.exteriorColor.length > 3;
-	}
+    private isExteriorColorValid(): boolean {
+        return this.exteriorColor !== null && this.exteriorColor.length > 3;
+    }
 
-	private isInteriorColorValid(): boolean {
-		return this.interiorColor !== null && this.interiorColor.length > 3;
-	}
+    private isInteriorColorValid(): boolean {
+        return this.interiorColor !== null && this.interiorColor.length > 3;
+    }
 
-	public isValid(): boolean {
-		return this.isListPriceValid() &&
-			this.isSalePriceValid() &&
-			this.isModelValid() &&
-			this.isTravelledDistanceValid() &&
-			this.isExteriorColorValid() &&
-			this.isInteriorColorValid();
-	}
+    public isValid(): boolean {
+        return this.isListPriceValid() &&
+            this.isSalePriceValid() &&
+            this.isModelValid() &&
+            this.isTravelledDistanceValid() &&
+            this.isExteriorColorValid() &&
+            this.isInteriorColorValid();
+    }
+
+    public getId(): number | undefined {
+        return this.id;
+    }
 }

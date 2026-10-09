@@ -1,4 +1,5 @@
 export class Model {
+  private id?: number;
   private name: string;
   private brand: number;
   private year: number;
@@ -10,7 +11,7 @@ export class Model {
   private seating: number;
   private horsePower: number;
 
-  constructor(name: string, brand: number, year: number, transmission: string, drivetrain: string, engine: string, vin: string, doors: number, seating: number, horsePower: number) {
+  constructor(name: string, brand: number, year: number, transmission: string, drivetrain: string, engine: string, vin: string, doors: number, seating: number, horsePower: number, id?: number) {
     this.name = name;
     this.brand = brand;
     this.year = year;
@@ -21,6 +22,7 @@ export class Model {
     this.doors = doors;
     this.seating = seating;
     this.horsePower = horsePower;
+    this.id = id;
   }
 
   public getName(): string {
@@ -154,5 +156,9 @@ export class Model {
       this.isDoorsValid() &&
       this.isSeatingValid() &&
       this.isHorsePowerValid();
+  }
+
+  public getId(): number | undefined {
+    return this.id;
   }
 }

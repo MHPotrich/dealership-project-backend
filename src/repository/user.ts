@@ -33,7 +33,7 @@ export function updateUser(userId: number, newValues: object): Boolean {
   return true;
 }
 
-export async function getUser(password: string, userId: string): Promise<User | null> {
+export async function getUser(password: string, userId: string): Promise<User | null | undefined> {
   const repositoryUser: { first_name: string, last_name: string, email: string, password: string } | null = getDatabaseInstance()
 		.query(`SELECT * FROM ${usersDbTable} WHERE id = ?`)
     .get(userId);
@@ -49,6 +49,8 @@ export async function getUser(password: string, userId: string): Promise<User | 
   if (await isPasswordCorrect(password, currentHashedPassword)) {
     return user;
   }
+
+  return undefined;
 }
 
 export function addUser(newUser: User): Boolean {

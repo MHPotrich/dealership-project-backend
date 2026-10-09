@@ -1,5 +1,5 @@
 export class ModelDto {
-  public id: number;
+  public id?: number;
   public name: string;
   public brand: number;
   public year: number;
@@ -11,8 +11,7 @@ export class ModelDto {
   public seating: number;
   public horsePower: number;
 
-  constructor(id: number, name: string, brand: number, year: number, transmission: string, drivetrain: string, engine: string, vin: string, doors: number, seating: number, horsePower: number) {
-    this.id = id;
+  constructor(name: string, brand: number, year: number, transmission: string, drivetrain: string, engine: string, vin: string, doors: number, seating: number, horsePower: number, id?: number) {
     this.name = name;
     this.brand = brand;
     this.year = year;
@@ -23,5 +22,6 @@ export class ModelDto {
     this.doors = doors;
     this.seating = seating;
     this.horsePower = horsePower;
+    this.id = id;
   }
 }

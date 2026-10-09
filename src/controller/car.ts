@@ -2,6 +2,7 @@ import type { BunRequest } from "bun";
 import { getResponseNotFound } from "../utils";
 import { deleteCar as deleteCarRepository, updateCar as updateCarRepository, addCar as addCarRepository, getCar as getCarRepository, getCars as getCarsRepository } from "../repository/car";
 import { Car } from "../entity/car";
+import { CarDto } from "../dto/car";
 
 function getQueryNumber(url: URL, target: string): number {
 	let value: string | null = url.searchParams.get(target);
@@ -15,10 +16,21 @@ export function getCars(request: BunRequest): Response {
 	const thisUrl: URL = new URL(request.url);
 	const limit: number = getQueryNumber(thisUrl, "limit");
 	const offset: number = getQueryNumber(thisUrl, "offset");
-
   const cars: Car[] = getCarsRepository(limit, offset);
+  const carsDto = cars.map(car => {
+    return new CarDto(
+      car.getListPrice(),
+      car.getSalePrice(),
+      car.getInStock(),
+      car.getModel(),
+      car.getTravelledDistance(),
+      car.getExteriorColor(),
+      car.getInteriorColor(),
+      car.getId()
+    );
+  });
 
-	return Response.json({ cars });
+	return Response.json({ cars: carsDto });
 }
 
 export function getCar(request: BunRequest): Response {
@@ -26,10 +38,21 @@ export function getCar(request: BunRequest): Response {
   const car: Car | null = getCarRepository(carId);
 
   if (car != null) {
-    return Response.json(car);
+    const carDto = new CarDto(
+      car.getListPrice(),
+      car.getSalePrice(),
+      car.getInStock(),
+      car.getModel(),
+      car.getTravelledDistance(),
+      car.getExteriorColor(),
+      car.getInteriorColor(),
+      car.getId()
+    );
+
+    return Response.json(carDto);
   }
 
-	return getResponseNotFound();
+  return getResponseNotFound();
 }
 
 export async function addCar(request: BunRequest): Promise<Response> {

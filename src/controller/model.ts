@@ -2,18 +2,52 @@ import type { BunRequest } from "bun";
 import { getResponseNotFound } from "../utils";
 import { deleteModel as deleteModelRepository, updateModel as updateModelRepository, addModel as addModelRepository, getModel as getModelRepository, getModels as getModelsRepository } from "../repository/model";
 import { Model } from "../entity/model";
+import { ModelDto } from "../dto/model";
 
 export function getModels(): Response {
   const models = getModelsRepository();
+  const modelsDto = models.map(model => {
+    return new ModelDto(
+      model.getName(),
+      model.getBrand(),
+      model.getYear(),
+      model.getTransmission(),
+      model.getDrivetrain(),
+      model.getEngine(),
+      model.getVin(),
+      model.getDoors(),
+      model.getSeating(),
+      model.getHorsePower(),
+      model.getId()
+    );
+  })
 
-	return Response.json({ models });
+  return Response.json({ models: modelsDto });
 }
 
 export function getModel(request: BunRequest): Response {
   const modelId: number = parseInt(request.params.id);
   const model: Model | null = getModelRepository(modelId);
 
-	return Response.json(model);
+  if (model) {
+    const modelDto = new ModelDto(
+      model.getName(),
+      model.getBrand(),
+      model.getYear(),
+      model.getTransmission(),
+      model.getDrivetrain(),
+      model.getEngine(),
+      model.getVin(),
+      model.getDoors(),
+      model.getSeating(),
+      model.getHorsePower(),
+      model.getId()
+    );
+
+    return Response.json(modelDto);
+  }
+
+	return new Response(null, { status: 404 });
 }
 
 export async function addModel(request: BunRequest): Promise<Response> {
@@ -47,14 +81,33 @@ export async function addModel(request: BunRequest): Promise<Response> {
 export async function updateModel(request: BunRequest): Promise<Response> {
 	const requestBody: object = await request.json();
 	const modelId: number = parseInt(request.params.id);
-  let statusCode: number = 200;
   const updateSuccess: Boolean = updateModelRepository(modelId, requestBody);
 
-  if (!updateSuccess) {
-    statusCode = 400;
+  if (updateSuccess) {
+    const model: Model | null = getModelRepository(modelId);
+
+    if (model) {
+      const modelDto = new ModelDto(
+        model.getName(),
+        model.getBrand(),
+        model.getYear(),
+        model.getTransmission(),
+        model.getDrivetrain(),
+        model.getEngine(),
+        model.getVin(),
+        model.getDoors(),
+        model.getSeating(),
+        model.getHorsePower(),
+        model.getId()
+      );
+
+      return Response.json(modelDto);
+    }
+
+    return new Response(null, { status: 404 });
   }
 
-	return new Response(null, { status: statusCode });
+	return new Response(null, { status: 400 });
 }
 
 export function deleteModel(request: BunRequest): Response {
